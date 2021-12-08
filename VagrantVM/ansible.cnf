@@ -1,0 +1,2 @@
+[ntp.edu.tentixo.com]
+172.19.176.1 ansible_ssh_pass=vagrant ansible_ssh_user=vagrant
