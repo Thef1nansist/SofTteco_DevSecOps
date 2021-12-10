@@ -26,11 +26,36 @@
    dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
    dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestar
    ```
-      or using PowerShell: <br>
+   or using PowerShell: <br>
    ```
    Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
    Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform
    ```
+   and then restart you PC;<br>
+   Hardware virtualization support must be enabled in the BIOS / UEFI setup of the computer. <br>
+   After these steps you need to update WSL for WSL 2 version. To do this, you need to go to the [website](https://docs.microsoft.com/ru-ru/windows/wsl/wsl2-kernel) and download    the wsl_update_x64.msi file, install it. <br>
+ 
+   To make WSL2 the default architecture for new distributions, in PowerShell run the command:<br>
+   ```
+   wsl --set-default-version 2
+   ```
+   Then you need to install distribution (i have it Ubuntu 20.04).<br>
+   And you can check the used WSL version in PowerShell using the command:<br>
+   ```
+   wsl -l -v
+   ```
+   if you don't see WSL version 2, you need using this comand:<br>
+   ```
+   wsl --set-version Ubuntu-20.04 2
+   ```
+## 2. Install PowerShell Preview
+   Depending on your Windows version, you may need to install the PowerShell Preview version. If that's the case, go to your current PowerShell version and run the following     command:<br>
+   ```
+   Invoke-Expression "& { $(Invoke-Restmethod https://aka.ms/install-powershell.ps1) } -UseMSI -Preview"
+   ```
+   Go through all the steps and finish the installation process.
+   
+   
    
  
  
