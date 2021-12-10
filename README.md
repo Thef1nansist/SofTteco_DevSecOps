@@ -215,17 +215,17 @@ end
    https://blog.sedicomm.com/2021/06/29/chto-takoe-virtualenv-v-python-i-kak-ego-ispolzovat/
    ```
 # Useful links
-  I faced some problems, these sites helped me to solve them:
-  1.asd
-  2.
-  3.
-  4.
-  5.
-  6.
-  7.
-  8.
-  9.
-  10.
+  I faced some problems, these sites helped me to solve them:<br>
+  1.asd<br>
+  2.<br>
+  3.<br>
+  4.<br>
+  5.<br>
+  6.<br>
+  7.<br>
+  8.<br>
+  9.<br>
+  10.<br>
   
  
  
