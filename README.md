@@ -116,10 +116,10 @@
 ### 6. Create your virtualenv:
    ```
    # Clone Git repository with my project
-        $ git clone https://gitlab.com/Dmitry.Plikus/devsecops.git 
-        $ cd ./devsecops/
-        $ python3 -m venv devsecops
-        $ source devsecops/bin/activate
+        $ git clone https://github.com/Thef1nansist/SofTteco_DevSecOps.git
+        $ cd ./VagrantVM/
+        $ python3 -m venv task
+        $ source task/bin/activate
         # Install packages
         $ pip install -r requirements.txt
    ```
@@ -181,25 +181,25 @@ end
 ### 2. Playbook.yml file:
    ```
    ---
-- hosts: ntp
-  become: true
-  tasks:
+- hosts: ntp										#The name of the group of machines on which this playbook will be executed
+  become: true										# become: true == sudo
+  tasks: 
 
-    - name: Update Operation system
+    - name: Update Operation system							# Updating OS packages
       package:
         name: '*'
         state: latest
 
     - name: Copy line the chrony configuration
-      lineinfile:
+      lineinfile:									# The module with which a line is inserted into a file
         path: /etc/chrony.conf
-        regexp: '{{item.regexp}}'
-        line: '{{item.line}}'
-        backrefs: yes
+        regexp: '{{item.regexp}}'							# Regex ^pool(.*) search line
+        line: '{{item.line}}'								# Replacing the found
+        backrefs: yes									# If the line is not found, then the file will not be changed
       with_items:
-        - {regexp: '^pool(.*)', line: 'server sth1.ntp.se \n server sth4.ntp.se' }
+        - {regexp: '^pool(.*)', line: 'server sth1.ntp.se \n server sth4.ntp.se' }	# Array with items
 
-    - name: Restart Chrony service
+    - name: Restart Chrony service							#Rebooting the service after changing the configuration file
       systemd:
         name: chronyd
         state: restarted
