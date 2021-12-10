@@ -140,32 +140,42 @@
 # About files:
 ### 1. Vagrnat files:
    ```
+   #if you are using Dhcp you need these lines
    class VagrantPlugins::ProviderVirtualBox::Action::Network
   def dhcp_server_matches_config?(dhcp_server, config)
     true
+    
   end
+  
 end
 
+#This line is responsible for the name of the configuration and version vagrant.
 Vagrant.configure("2") do |config|
 
-  config.vm.define "ntp.edu.tentixo.com" do |config|
-    config.vm.hostname = "ntp.edu.tentixo.com"
-    config.vm.box = "generic/rhel8"
-    config.vm.network "private_network", ip: "192.168.56.0"
-    config.vm.box_check_update = false
+  config.vm.define "ntp.edu.tentixo.com" do |config| 			#Description of server name and config name
+    config.vm.hostname = "ntp.edu.tentixo.com"				#Hostname
+    config.vm.box = "generic/rhel8"					#The image that the vagrant will use
+    config.vm.network "private_network", ip: "192.168.56.0"		#Description of the network type, specifying the ip of the machine
+    config.vm.box_check_update = false					#Prohibiting checking for updates
+    
   end
-    config.vm.provider "virtualbox" do |vb|
-      vb.cpus = 1
-      vb.gui = false
-      vb.memory = "1024"
+  
+    config.vm.provider "virtualbox" do |vb|				 #Provider selection and its config
+      vb.cpus = 1							 #Count of cpu for using VM
+      vb.gui = false							 #Without gui
+      vb.memory = "1024"						 #According memory for using VM
+      
     end
-    config.ssh.insert_key = false
-    config.vm.provision :ansible do |ansible|
-    ansible.playbook = "playbook.yml"
-    ansible.inventory_path = "inventory"
+    
+    config.ssh.insert_key = false					 #Vagrant will not automatically add a keypair to the guest
+    config.vm.provision :ansible do |ansible|				 #Run Ansible from the Vagrant Host
+    ansible.playbook = "playbook.yml"					 #Path to playbook.yml
+    ansible.inventory_path = "inventory"				 #Path to inventory
     ansible.raw_arguments = ["-vvv", "--flush-cache"
-	]
+	]								 #Array with ansible_arguments for debug
+	
     end
+    
 end
    ```
 ### 2. Playbook.yml file:
@@ -204,8 +214,19 @@ end
    Good article about requirements.txt:
    https://blog.sedicomm.com/2021/06/29/chto-takoe-virtualenv-v-python-i-kak-ego-ispolzovat/
    ```
-   
-   
+# Useful links
+  I faced some problems, these sites helped me to solve them:
+  1.asd
+  2.
+  3.
+  4.
+  5.
+  6.
+  7.
+  8.
+  9.
+  10.
+  
  
  
 
