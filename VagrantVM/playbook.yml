@@ -1,19 +1,22 @@
 ---
-- hosts: 'ntp.edu.tentixo.com'
+- hosts: ntp
   become: true
   tasks:
 
-    - name: Copy over the chrony configuration
-      ansible.builtin.lineinfile:
-        path: /etc/chrony.conf
-        regexp: '^pool'
-        line: "pool ntp.se"
+    - name: Update Operation system
+      package:
+        name: '*'
+        state: latest
 
-    # - name: Overwriting chrony.conf file
-    #   copy: 
-    #     src: chrony.conf
-    #     dest: /etc/chrony.conf
-    
+    - name: Copy line the chrony configuration
+      lineinfile:
+        path: /etc/chrony.conf
+        regexp: '{{item.regexp}}'
+        line: '{{item.line}}'
+        backrefs: yes
+      with_items:
+        - {regexp: '^pool(.*)', line: 'server sth1.ntp.se \n server sth4.ntp.se' }
+
     - name: Restart Chrony service
       systemd:
         name: chronyd
