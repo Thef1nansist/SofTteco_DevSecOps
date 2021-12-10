@@ -137,7 +137,74 @@
     $ chronyc sources
     $ chronyc tracking
    ```
+# About files:
+### 1. Vagrnat files:
+   ```
+   class VagrantPlugins::ProviderVirtualBox::Action::Network
+  def dhcp_server_matches_config?(dhcp_server, config)
+    true
+  end
+end
 
+Vagrant.configure("2") do |config|
+
+  config.vm.define "ntp.edu.tentixo.com" do |config|
+    config.vm.hostname = "ntp.edu.tentixo.com"
+    config.vm.box = "generic/rhel8"
+    config.vm.network "private_network", ip: "192.168.56.0"
+    config.vm.box_check_update = false
+  end
+    config.vm.provider "virtualbox" do |vb|
+      vb.cpus = 1
+      vb.gui = false
+      vb.memory = "1024"
+    end
+    config.ssh.insert_key = false
+    config.vm.provision :ansible do |ansible|
+    ansible.playbook = "playbook.yml"
+    ansible.inventory_path = "inventory"
+    ansible.raw_arguments = ["-vvv", "--flush-cache"
+	]
+    end
+end
+   ```
+### 2. Playbook.yml file:
+   ```
+   ---
+- hosts: ntp
+  become: true
+  tasks:
+
+    - name: Update Operation system
+      package:
+        name: '*'
+        state: latest
+
+    - name: Copy line the chrony configuration
+      lineinfile:
+        path: /etc/chrony.conf
+        regexp: '{{item.regexp}}'
+        line: '{{item.line}}'
+        backrefs: yes
+      with_items:
+        - {regexp: '^pool(.*)', line: 'server sth1.ntp.se \n server sth4.ntp.se' }
+
+    - name: Restart Chrony service
+      systemd:
+        name: chronyd
+        state: restarted
+   ```
+### 3. About inventory file:
+   ```
+    You can read more information about inventory file here:
+    https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html
+   ```
+### 4. About requirements.txt file:
+   ```
+   Good article about requirements.txt:
+   https://blog.sedicomm.com/2021/06/29/chto-takoe-virtualenv-v-python-i-kak-ego-ispolzovat/
+   ```
+   
    
  
  
