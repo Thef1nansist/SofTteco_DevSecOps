@@ -16,8 +16,8 @@
  This project work on Windows 10 OS using WSL2(Only WSL2!!!) and in WSL2 using Ubuntu 20.04 <br>
  
  ## 0. Install vagrant and VirtualBox:
- 1. You need to go to the virtualbox [site](https://www.virtualbox.org/wiki/Downloads) and download the latest version for Windwos(I have it 6.1.30)<br>
- 2. You need to go to the vagrant [site](https://www.vagrantup.com/downloads) and download the last version(for you processor 32/64-bit) for Windows(I have it 2.2.19 for 64-bit)
+ 1. You need to go to the virtualbox [website](https://www.virtualbox.org/wiki/Downloads) and download the latest version for Windwos(I have it 6.1.30)<br>
+ 2. You need to go to the vagrant [website](https://www.vagrantup.com/downloads) and download the last version(for you processor 32/64-bit) for Windows(I have it 2.2.19 for 64-bit)
 
  ## 1. Install WSL2
    You must use WSL2. To install it, check the official documentation.<br>
@@ -48,13 +48,34 @@
    ```
    wsl --set-version Ubuntu-20.04 2
    ```
+   
 ## 2. Install PowerShell Preview
    Depending on your Windows version, you may need to install the PowerShell Preview version. If that's the case, go to your current PowerShell version and run the following     command:<br>
    ```
    Invoke-Expression "& { $(Invoke-Restmethod https://aka.ms/install-powershell.ps1) } -UseMSI -Preview"
    ```
-   Go through all the steps and finish the installation process.
+   Go through all the steps and finish the installation process. <br>
    
+## 3. Install Vagrant inside WSL2
+   Assuming you're using Ubuntu 20.04, run:
+   ```
+   # run inside WSL 2
+   # check https://www.vagrantup.com/downloads for more info
+   curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+   sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+   sudo apt-get update && sudo apt-get install vagrant
+   ```
+   Then, you must enable WSL 2 support. To do that, append two lines into the ~/.bashrc file: <br>
+   ```
+   # append those two lines into ~/.bashrc
+   echo 'export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"' >> ~/.bashrc
+   echo 'export PATH="$PATH:/mnt/c/Program Files/Oracle/VirtualBox"' >> ~/.bashrc
+
+   # now reload the ~/.bashrc file
+   source ~/.bashrc
+   ```
+   
+## 4.
    
    
  
