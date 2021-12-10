@@ -215,14 +215,14 @@ end
    https://blog.sedicomm.com/2021/06/29/chto-takoe-virtualenv-v-python-i-kak-ego-ispolzovat/
    ```
 # Useful links
-  I faced some problems, these sites helped me to solve them:<br>
-  1.asd<br>
-  2.<br>
-  3.<br>
-  4.<br>
-  5.<br>
-  6.<br>
-  7.<br>
+  I faced some problems or just new information, these sites helped me to solve them:<br>
+  1.https://docs.ansible.com/ansible/2.9/modules/systemd_module.html<br>
+  2.https://docs.ansible.com/ansible/2.8/user_guide/playbooks_best_practices.html<br>
+  3.https://github.com/Karandash8/virtualbox_WSL2<br>
+  4.https://stackoverflow.com/questions/40535667/ansible-failed-to-connect-to-the-host-via-ssh<br>
+  5.https://www.schakko.de/2020/01/10/fixing-unprotected-key-file-when-using-ssh-or-ansible-inside-wsl/<br>
+  6.https://stackoverflow.com/questions/41377375/failed-to-connect-to-host-via-ssh-on-vagrant-with-ansible-playbook<br>
+  7.https://runebook.dev/ru/docs/ansible/collections/ansible/builtin/lineinfile_module<br>
   8.<br>
   9.<br>
   10.<br>
