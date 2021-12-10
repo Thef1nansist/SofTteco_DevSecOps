@@ -12,8 +12,13 @@
  ## Objective of the project: <br>
  The purpose of the work is to acquire practical skills in working with Ansible, VagrantBox, VirtualBox, RHEL8, WSL2 and automatic configuration of ntp servers on ntp.se  <br>
  
- ## Installation and use processes:
- This project work on Windows 10 OS using WSL2(Only WSL2!!!) and in WSL2 using Ubuntu 20.04 <br>
+ ## Requirements:
+ 1. Windows 10 - version +19042.928
+ 2. VirtualBox - version +6.1.22 (Windows version)
+ 3. WSL 2
+ 4. Vagrant +2.2.18 (Linux version)
+ 5. Vagrant plugin: virtualbox_WSL2
+ 6. (maybe) PowerShell Preview
  
  ## 0. Install vagrant and VirtualBox:
  1. You need to go to the virtualbox [website](https://www.virtualbox.org/wiki/Downloads) and download the latest version for Windwos(I have it 6.1.30)<br>
@@ -75,8 +80,64 @@
    source ~/.bashrc
    ```
    
-## 4.
-   
+## 4. Install virtualbox_WSL2 plugin
+   If you have problem with Vagrant like this:
+   ```
+   Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Checking if box 'hashicorp/bionic64' version '1.0.282' is up to date...
+==> default: Clearing any previously set forwarded ports...
+==> default: Clearing any previously set network interfaces...
+==> default: Preparing network interfaces based on configuration...
+    default: Adapter 1: nat
+==> default: Forwarding ports...
+    default: 22 (guest) => 2222 (host) (adapter 1)
+==> default: Booting VM...
+==> default: Waiting for machine to boot. This may take a few minutes...
+    default: SSH address: 127.0.0.1:2222
+    default: SSH username: vagrant
+    default: SSH auth method: private key
+    default: Warning: Connection refused. Retrying...
+    default: Warning: Connection refused. Retrying...
+    default: Warning: Connection refused. Retrying...
+    default: Warning: Connection refused. Retrying...
+    default: Warning: Connection refused. Retrying...
+    default: Warning: Connection refused. Retrying...
+==> default: Waiting for cleanup before exiting...
+   ```
+   You need install plugin:
+   ```
+  $ vagrant plugin install virtualbox_WSL2
+   ```
+## 5. Create project folder:
+   ```
+   $ mkdir VagrantVM
+   $ cd ./VagrantVM/
+   ```
+### 6. Create your virtualenv:
+   ```
+   # Clone Git repository with my project
+        $ git clone https://gitlab.com/Dmitry.Plikus/devsecops.git 
+        $ cd ./devsecops/
+        $ python3 -m venv devsecops
+        $ source devsecops/bin/activate
+        # Install packages
+        $ pip install -r requirements.txt
+   ```
+### 7. Install ansible and Vagrant build:
+   ```
+   $ apt install ansible
+   $ vagrant up
+   ```
+### 8. Connect to VM:
+   ```
+   $ vagrant ssh ntp.edu.tentixo.com
+   ```
+### 9. Checking the work of ntp servers:
+   ```
+    $ chronyc sources
+    $ chronyc tracking
+   ```
+
    
  
  
