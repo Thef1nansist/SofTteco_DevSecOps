@@ -138,7 +138,7 @@
     $ chronyc tracking
    ```
 # About files:
-### 1. Vagrnat files:
+### 1. Vagrant files:
    ```
    #if you are using Dhcp you need these lines
    class VagrantPlugins::ProviderVirtualBox::Action::Network
