@@ -26,7 +26,7 @@
 
  ## 1. Install WSL2
    You must use WSL2. To install it, check the official documentation.<br>
-   1. You need to turn on components WSL 10 using dism: <br>
+   You need to turn on components WSL 10 using dism: <br>
    ```
    dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
    dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestar
@@ -129,18 +129,18 @@
    ansible 2.9.6
    $ vagrant up
    ```
-### 8. Connect to VM:
+## 7. Connect to VM:
    ```
    $ vagrant ssh ntp.edu.tentixo.com
    ```
-### 9. Checking the work of ntp servers:
+## 8. Checking the work of ntp servers:
    And run these commands in rhel8:
    ```
     $ chronyc sources
     $ chronyc tracking
    ```
 # About files:
-### 1. Vagrant files:
+## 1. Vagrant files:
    ```
 #This line is responsible for the name of the configuration and version vagrant.
 Vagrant.configure("2") do |config|
@@ -171,7 +171,7 @@ Vagrant.configure("2") do |config|
     
 end
    ```
-### 2. Playbook.yml file:
+## 2. Playbook.yml file:
    ```
    ---
 - hosts: ntp										#The name of the group of machines on which this playbook will be executed
@@ -197,12 +197,12 @@ end
         name: chronyd
         state: restarted
    ```
-### 3. About inventory file:
+## 3. About inventory file:
    ```
     You can read more information about inventory file here:
     https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html
    ```
-### 4. About requirements.txt file:
+## 4. About requirements.txt file:
    ```
    Good article about requirements.txt:
    https://blog.sedicomm.com/2021/06/29/chto-takoe-virtualenv-v-python-i-kak-ego-ispolzovat/
