@@ -121,8 +121,8 @@
    Then you need to install ansible 2.9.6 in virtualenv
    ```
    $ source virtualenv/bin/activate
-   (virtualenv)$ pip install wheel
    (virtualenv)$ python3 -m pip install --upgrade pip
+   (virtualenv)$ pip install wheel
    (virtualenv)$ python3 -m pip install ansible==2.9.6
    #chech version:
    (virtualenv)$ ansible --version
