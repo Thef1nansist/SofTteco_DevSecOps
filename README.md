@@ -216,4 +216,3 @@ end
   5.https://www.schakko.de/2020/01/10/fixing-unprotected-key-file-when-using-ssh-or-ansible-inside-wsl/<br>
   6.https://stackoverflow.com/questions/41377375/failed-to-connect-to-host-via-ssh-on-vagrant-with-ansible-playbook<br>
   7.https://runebook.dev/ru/docs/ansible/collections/ansible/builtin/lineinfile_module<br>
-
