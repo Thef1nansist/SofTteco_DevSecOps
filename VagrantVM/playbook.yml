@@ -1,23 +1,23 @@
 ---
-- hosts: ntp
-  become: true
+- hosts: ntp           #The name of the group of machines on which this playbook will be executed                                                             
+  become: true         # become: true == sudo
   tasks:
 
     - name: Update Operation system
-      package:
+      package:                        # Updating OS packages
         name: '*'
         state: latest
 
     - name: Copy line the chrony configuration
-      lineinfile:
+      lineinfile:                     # The module with which a line is inserted into a file
         path: /etc/chrony.conf
-        regexp: '{{item.regexp}}'
-        line: '{{item.line}}'
-        backrefs: yes
+        regexp: '{{item.regexp}}'     # Regex ^pool(.*) search line
+        line: '{{item.line}}'         # Replacing the found
+        backrefs: yes                 # If the line is not found, then the file will not be changed
       with_items:
-        - {regexp: '^pool(.*)', line: 'server sth1.ntp.se \n server sth4.ntp.se' }
+        - {regexp: '^pool(.*)', line: 'server sth1.ntp.se \n server sth4.ntp.se' }  # Array with items
 
-    - name: Restart Chrony service
+    - name: Restart Chrony service    #Rebooting the service after changing the configuration file
       systemd:
         name: chronyd
         state: restarted
