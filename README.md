@@ -108,20 +108,25 @@
    $ cd ./VagrantVM/
    ```
 ## 5. Create your virtualenv:
+   First, verify the installed Python version:
    ```
-   # Clone Git repository with my project
-        $ git clone https://github.com/Thef1nansist/SofTteco_DevSecOps.git
-        $ cd ./VagrantVM/
-        $ python3 -m venv task
-        $ source task/bin/activate
-        # Install packages
-        $ pip install -r requirements.txt
+   # check Python version
+   $ python3 -V
+   Python 3.8.10
+   $ python3 -m venv virtualenv
+   $ ls
+   virtualenv   
    ```
 ## 6. Install ansible and Vagrant build:
-   Then you need to install ansible
+   Then you need to install ansible 2.9.6 in virtualenv
    ```
-   # inside WSL 2
-   $ apt install ansible
+   $ source virtualenv/bin/activate
+   (virtualenv)$ pip install wheel
+   (virtualenv)$ python3 -m pip install --upgrade pip
+   (virtualenv)$ python3 -m pip install ansible==2.9.6
+   #chech version:
+   (virtualenv)$ ansible --version
+   ansible 2.9.6
    $ vagrant up
    ```
 ### 8. Connect to VM:
@@ -129,6 +134,7 @@
    $ vagrant ssh ntp.edu.tentixo.com
    ```
 ### 9. Checking the work of ntp servers:
+   And run these commands in rhel8:
    ```
     $ chronyc sources
     $ chronyc tracking
@@ -136,22 +142,13 @@
 # About files:
 ### 1. Vagrant files:
    ```
-   #if you are using Dhcp you need these lines
-   class VagrantPlugins::ProviderVirtualBox::Action::Network
-  def dhcp_server_matches_config?(dhcp_server, config)
-    true
-    
-  end
-  
-end
-
 #This line is responsible for the name of the configuration and version vagrant.
 Vagrant.configure("2") do |config|
 
   config.vm.define "ntp.edu.tentixo.com" do |config| 			#Description of server name and config name
     config.vm.hostname = "ntp.edu.tentixo.com"				#Hostname
     config.vm.box = "generic/rhel8"					#The image that the vagrant will use
-    config.vm.network "private_network", ip: "192.168.56.0"		#Description of the network type, specifying the ip of the machine
+    config.vm.network "private_network", ip: "192.168.56.2"		#Description of the network type, specifying the ip of the machine
     config.vm.box_check_update = false					#Prohibiting checking for updates
     
   end
@@ -165,9 +162,9 @@ Vagrant.configure("2") do |config|
     
     config.ssh.insert_key = false					 #Vagrant will not automatically add a keypair to the guest
     config.vm.provision :ansible do |ansible|				 #Run Ansible from the Vagrant Host
-    ansible.playbook = "playbook.yml"					 #Path to playbook.yml
-    ansible.inventory_path = "inventory"				 #Path to inventory
-    ansible.raw_arguments = ["-vvv", "--flush-cache"
+    	ansible.playbook = "playbook.yml"					 #Path to playbook.yml
+    	ansible.inventory_path = "inventory"				 #Path to inventory
+    	ansible.raw_arguments = ["-vvv", "--flush-cache"
 	]								 #Array with ansible_arguments for debug
 	
     end
