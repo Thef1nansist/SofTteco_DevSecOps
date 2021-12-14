@@ -145,27 +145,27 @@
 #This line is responsible for the name of the configuration and version vagrant.
 Vagrant.configure("2") do |config|
 
-  config.vm.define "ntp.edu.tentixo.com" do |config| 			#Description of server name and config name
-    config.vm.hostname = "ntp.edu.tentixo.com"				#Hostname
-    config.vm.box = "generic/rhel8"					#The image that the vagrant will use
-    config.vm.network "private_network", ip: "192.168.56.2"		#Description of the network type, specifying the ip of the machine
-    config.vm.box_check_update = false					#Prohibiting checking for updates
+  config.vm.define "ntp.edu.tentixo.com" do |config| 			
+    config.vm.hostname = "ntp.edu.tentixo.com"				
+    config.vm.box = "generic/rhel8"					
+    config.vm.network "private_network", ip: "192.168.56.2"		
+    config.vm.box_check_update = false					
     
   end
   
-    config.vm.provider "virtualbox" do |vb|				 #Provider selection and its config
-      vb.cpus = 1							 #Count of cpu for using VM
-      vb.gui = false							 #Without gui
-      vb.memory = "1024"						 #According memory for using VM
+    config.vm.provider "virtualbox" do |vb|				 
+      vb.cpus = 1							 
+      vb.gui = false							 
+      vb.memory = "1024"						
       
     end
     
-    config.ssh.insert_key = false					 #Vagrant will not automatically add a keypair to the guest
-    config.vm.provision :ansible do |ansible|				 #Run Ansible from the Vagrant Host
-    	ansible.playbook = "playbook.yml"					 #Path to playbook.yml
-    	ansible.inventory_path = "inventory"				 #Path to inventory
+    config.ssh.insert_key = false					
+    config.vm.provision :ansible do |ansible|				
+    	ansible.playbook = "playbook.yml"					
+    	ansible.inventory_path = "inventory"				
     	ansible.raw_arguments = ["-vvv", "--flush-cache"
-	]								 #Array with ansible_arguments for debug
+	]								 
 	
     end
     
@@ -174,25 +174,25 @@ end
 ## 2. Playbook.yml file:
    ```
    ---
-- hosts: ntp										#The name of the group of machines on which this playbook will be executed
-  become: true										# become: true == sudo
+- hosts: ntp										
+  become: true										
   tasks: 
 
-    - name: Update Operation system							# Updating OS packages
+    - name: Update Operation system							
       package:
         name: '*'
         state: latest
 
     - name: Copy line the chrony configuration
-      lineinfile:									# The module with which a line is inserted into a file
+      lineinfile:									
         path: /etc/chrony.conf
-        regexp: '{{item.regexp}}'							# Regex ^pool(.*) search line
-        line: '{{item.line}}'								# Replacing the found
-        backrefs: yes									# If the line is not found, then the file will not be changed
+        regexp: '{{item.regexp}}'							
+        line: '{{item.line}}'								
+        backrefs: yes									
       with_items:
-        - {regexp: '^pool(.*)', line: 'server sth1.ntp.se \n server sth4.ntp.se' }	# Array with items
+        - {regexp: '^pool(.*)', line: 'server sth1.ntp.se \n server sth4.ntp.se' }	
 
-    - name: Restart Chrony service							#Rebooting the service after changing the configuration file
+    - name: Restart Chrony service							
       systemd:
         name: chronyd
         state: restarted
