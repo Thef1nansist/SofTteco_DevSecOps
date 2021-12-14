@@ -1,4 +1,4 @@
-"# SofTteco_DevSecOps" 
+# Windows
 <br>
 ## Task: <br>
  Change ntp to ntp.se with Ansible in an RHEL 8 virtual server named ntp.edu.tentixo.com via VagrantBox on VirtualBox - connection should be done with computer name, not IP.<br>
@@ -54,14 +54,7 @@
    wsl --set-version Ubuntu-20.04 2
    ```
    
-## 2. Install PowerShell Preview
-   Depending on your Windows version, you may need to install the PowerShell Preview version. If that's the case, go to your current PowerShell version and run the following     command:<br>
-   ```
-   Invoke-Expression "& { $(Invoke-Restmethod https://aka.ms/install-powershell.ps1) } -UseMSI -Preview"
-   ```
-   Go through all the steps and finish the installation process. <br>
-   
-## 3. Install Vagrant inside WSL2
+## 2. Install Vagrant inside WSL2
    Assuming you're using Ubuntu 20.04, run:
    ```
    # run inside WSL 2
@@ -80,7 +73,7 @@
    source ~/.bashrc
    ```
    
-## 4. Install virtualbox_WSL2 plugin
+## 3. Install virtualbox_WSL2 plugin
    If you have problem with Vagrant like this:
    ```
    Bringing machine 'default' up with 'virtualbox' provider...
@@ -108,12 +101,13 @@
    ```
   $ vagrant plugin install virtualbox_WSL2
    ```
-## 5. Create project folder:
+## 4. Create project folder:
+   Go to the required directive and create project folder:
    ```
    $ mkdir VagrantVM
    $ cd ./VagrantVM/
    ```
-### 6. Create your virtualenv:
+## 5. Create your virtualenv:
    ```
    # Clone Git repository with my project
         $ git clone https://github.com/Thef1nansist/SofTteco_DevSecOps.git
@@ -123,8 +117,10 @@
         # Install packages
         $ pip install -r requirements.txt
    ```
-### 7. Install ansible and Vagrant build:
+## 6. Install ansible and Vagrant build:
+   Then you need to install ansible
    ```
+   # inside WSL 2
    $ apt install ansible
    $ vagrant up
    ```
