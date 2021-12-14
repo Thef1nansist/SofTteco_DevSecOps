@@ -127,7 +127,7 @@
    #chech version:
    (virtualenv)$ ansible --version
    ansible 2.9.6
-   $ vagrant up
+   (virtualenv)$ vagrant up
    ```
 ## 7. Connect to VM:
    ```
