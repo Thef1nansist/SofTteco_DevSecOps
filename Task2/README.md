@@ -1,16 +1,18 @@
 # Windows
 <br>
 ## Task: <br>
- Change ntp to ntp.se with Ansible in an RHEL 8 virtual server named ntp.edu.tentixo.com via VagrantBox on VirtualBox - connection should be done with computer name, not IP.<br>
+Set up two servers 1 Django 1 Postgres that communicate with each other (Django need a SQL server). The communication between them should use FQDN (and be encrypted). In Virtualbox. You may use Vagrant boxes or install software with ansible on an empty RHEL 8.<br>
  
- [-Info about RHEL8](https://www.linuxadictos.com/ru/rhel8.html) <br>
+ [-Info about Ubuntu 20.04](https://releases.ubuntu.com/20.04/) <br>
  [-Info about VirtualBox](https://www.virtualbox.org/)<br>
  [-Info about VagrantBox](https://www.vagrantup.com/)<br>
- [-Info about Ansible](https://www.thomaspreischl.de/ansible-wsl-windows/)<br>
+ [-Info about PostgreSql](https://www.postgresql.org/)<br>
+ [-Info about Django](https://www.djangoproject.com/)<br>
+ [-Info about Virtualenv](https://virtualenv.pypa.io/en/latest/)<br>
  [-Info about WSL2](https://winitpro.ru/index.php/2020/07/13/zapusk-linux-v-windows-wsl-2/)<br>
  
  ## Objective of the project: <br>
- The purpose of the work is to acquire practical skills in working with Ansible, VagrantBox, VirtualBox, RHEL8, WSL2 and automatic configuration of ntp servers on ntp.se  <br>
+ The goal of the project is to gain more experience with  VagrantBox, VirtualBox, Django, PostgreSQL, as well as the network, all this is implemented on Ubuntu  <br>
  
  ## Requirements:
  1. Windows 10 - version +19042.928
@@ -18,7 +20,10 @@
  3. WSL 2
  4. Vagrant +2.2.18 (Linux version)
  5. Vagrant plugin: virtualbox_WSL2
- 6. (maybe) PowerShell Preview
+ 6. Linux Ubuntu 20.04(for vagrant box)
+ 7. Python (3.8.10 or 3.7.6)
+ 8. Virtualenv (20.0.17)
+ 9. 
  
  ## 0. Install vagrant and VirtualBox:
  1. You need to go to the virtualbox [website](https://www.virtualbox.org/wiki/Downloads) and download the latest version for Windwos(I have it 6.1.30)<br>
@@ -105,7 +110,7 @@
    Go to the required directive and create project folder:
    ```
    $ mkdir VagrantVM
-   $ cd ./VagrantVM/
+   $ cd ./Task2/
    ```
 ## 5. Create your virtualenv:
    First, verify the installed Python version:
@@ -117,17 +122,10 @@
    $ ls
    virtualenv   
    ```
-## 6. Install ansible and Vagrant build:
-   Then you need to install ansible 2.9.6 in virtualenv
+## 6. Connect to postgres machine via ssh:
+ 
    ```
-   $ source virtualenv/bin/activate
-   (virtualenv)$ python3 -m pip install --upgrade pip
-   (virtualenv)$ pip install wheel
-   (virtualenv)$ python3 -m pip install ansible==2.9.6
-   #chech version:
-   (virtualenv)$ ansible --version
-   ansible 2.9.6
-   (virtualenv)$ vagrant up
+  
    ```
 ## 7. Connect to VM:
    ```
