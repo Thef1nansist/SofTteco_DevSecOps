@@ -29,7 +29,7 @@ Set up two servers 1 Django 1 Postgres that communicate with each other (Django 
  1. You need to go to the virtualbox [website](https://www.virtualbox.org/wiki/Downloads) and download the latest version for Windwos(I have it 6.1.30)<br>
  2. You need to go to the vagrant [website](https://www.vagrantup.com/downloads) and download the last version(for you processor 32/64-bit) for Windows(I have it 2.2.19 for 64-bit)
 
- ## 1. Install WSL2
+ ##  Install WSL2
    You must use WSL2. To install it, check the official documentation.<br>
    You need to turn on components WSL 10 using dism: <br>
    ```
@@ -59,7 +59,7 @@ Set up two servers 1 Django 1 Postgres that communicate with each other (Django 
    wsl --set-version Ubuntu-20.04 2
    ```
    
-## 2. Install Vagrant inside WSL2
+## Install Vagrant inside WSL2
    Assuming you're using Ubuntu 20.04, run:
    ```
    # run inside WSL 2
@@ -78,7 +78,7 @@ Set up two servers 1 Django 1 Postgres that communicate with each other (Django 
    source ~/.bashrc
    ```
    
-## 3. Install virtualbox_WSL2 plugin
+##  Install virtualbox_WSL2 plugin
    If you have problem with Vagrant like this:
    ```
    Bringing machine 'default' up with 'virtualbox' provider...
@@ -122,95 +122,373 @@ Set up two servers 1 Django 1 Postgres that communicate with each other (Django 
    $ ls
    virtualenv   
    ```
-## 6. Connect to postgres machine via ssh:
- 
-   ```
-  
-   ```
-## 7. Connect to VM:
-   ```
-   $ vagrant ssh ntp.edu.tentixo.com
-   ```
-## 8. Checking the work of ntp servers:
-   And run these commands in rhel8:
-   ```
-    $ chronyc sources
-    $ chronyc tracking
-   ```
-# About files:
-## 1. Vagrant files:
-   ```
-#This line is responsible for the name of the configuration and version vagrant.
-Vagrant.configure("2") do |config|
+### Installation
 
-  config.vm.define "ntp.edu.tentixo.com" do |config| 			
-    config.vm.hostname = "ntp.edu.tentixo.com"				
-    config.vm.box = "generic/rhel8"					
-    config.vm.network "private_network", ip: "192.168.56.2"		
-    config.vm.box_check_update = false					
-    
+Let's create a folder for our project.
+
+```
+  mkdir Task2
+  cd Task2
+```
+
+After that, we will create a virtual environment.
+
+```
+  python3 -m venv Django_venv
+```
+
+Next, you need to install virtualenv.
+
+```
+  sudo apt-get install python3-venv -y
+```
+
+After that, you need to activate the virtual environment.
+```
+  source Django_venv/bin/activate
+```
+
+Useful link:
+- [Website about Virtualenv]
+
+After successfully isolating the project, you can create a Vagrantfile.
+
+Vagrant is able to define and control multiple guest machines per Vagrantfile. 
+Multiple machines are defined within the same project Vagrantfile using the config.vm.define method call. 
+This configuration directive is a little funny, because it creates a Vagrant configuration within a configuration. 
+
+My VagrantFile looks like this:
+```
+ Vagrant.configure("2") do |config|
+
+  config.vm.define "postgre" do |config|            
+    config.vm.hostname = "postgre"                 
+    config.vm.box = "bento/ubuntu-20.04"                            
+    config.vm.network "public_network", ip: "192.168.1.126", bridge: "Realtek 8821AE Wireless LAN 802.11ac PCI-E NIC"    of the machine
+    config.vm.box_check_update = false                        
+    config.vm.provider "virtualbox" do |vb|                   
+            vb.cpus = 1                                              
+            vb.gui = false                                          
+            vb.memory = "2048"                                            
+        
+        end
+  end
+
+    config.vm.define "django" do |config|            
+    config.vm.hostname = "django"                 
+    config.vm.box = "bento/ubuntu-20.04"                          
+    config.vm.network "public_network", ip: "192.168.1.184", bridge: "Realtek 8821AE Wireless LAN 802.11ac PCI-E NIC"     
+    config.vm.box_check_update = false                          
+    config.vm.provider "virtualbox" do |vb|                
+            vb.cpus = 1                                           
+            vb.gui = false                                          
+            vb.memory = "2048"                                         
+        
+        end
   end
   
-    config.vm.provider "virtualbox" do |vb|				 
-      vb.cpus = 1							 
-      vb.gui = false							 
-      vb.memory = "1024"						
-      
-    end
-    
-    config.ssh.insert_key = false					
-    config.vm.provision :ansible do |ansible|				
-    	ansible.playbook = "playbook.yml"					
-    	ansible.inventory_path = "inventory"				
-    	ansible.raw_arguments = ["-vvv", "--flush-cache"
-	]								 
-	
-    end
-    
 end
-   ```
-## 2. Playbook.yml file:
-   ```
-   ---
-- hosts: ntp										
-  become: true										
-  tasks: 
 
-    - name: Update Operation system							
-      package:
-        name: '*'
-        state: latest
+```
 
-    - name: Copy line the chrony configuration
-      lineinfile:									
-        path: /etc/chrony.conf
-        regexp: '{{item.regexp}}'							
-        line: '{{item.line}}'								
-        backrefs: yes									
-      with_items:
-        - {regexp: '^pool(.*)', line: 'server sth1.ntp.se \n server sth4.ntp.se' }	
+Useful links:
+- [Multi-Machine]
+- [Discover Vagrant Boxes]
+- [Networking and Multimachine]
 
-    - name: Restart Chrony service							
-      systemd:
-        name: chronyd
-        state: restarted
-   ```
-## 3. About inventory file:
-   ```
-    You can read more information about inventory file here:
-    https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html
-   ```
-## 4. About requirements.txt file:
-   ```
-   Good article about requirements.txt:
-   https://blog.sedicomm.com/2021/06/29/chto-takoe-virtualenv-v-python-i-kak-ego-ispolzovat/
-   ```
-# Useful links
-  I faced some problems or just new information, these sites helped me to solve them:<br>
-  1.https://docs.ansible.com/ansible/2.9/modules/systemd_module.html<br>
-  2.https://docs.ansible.com/ansible/2.8/user_guide/playbooks_best_practices.html<br>
-  3.https://github.com/Karandash8/virtualbox_WSL2<br>
-  4.https://stackoverflow.com/questions/40535667/ansible-failed-to-connect-to-the-host-via-ssh<br>
-  5.https://www.schakko.de/2020/01/10/fixing-unprotected-key-file-when-using-ssh-or-ansible-inside-wsl/<br>
-  6.https://stackoverflow.com/questions/41377375/failed-to-connect-to-host-via-ssh-on-vagrant-with-ansible-playbook<br>
-  7.https://runebook.dev/ru/docs/ansible/collections/ansible/builtin/lineinfile_module<br>
+After that, we start both virtual machines. In my instructions, I will run them one by one.
+We start the virtual machine on which Postgresql will be installed.
+```
+  vagrant up postgre
+  vagrant ssh postgre;
+```
+
+### The main task
+
+#### 1) Installing Postgresql
+If you wish to install Postgresql, the process is very straightforward.
+First, update your local package index with apt:
+```
+  sudo apt-get update
+```
+> PostgreSQL is available in all Ubuntu versions by default. 
+> However, Ubuntu "snapshots" a specific version of PostgreSQL that is then supported throughout the lifetime of that Ubuntu version. 
+> Other versions of PostgreSQL are available through the PostgreSQL apt repository.
+To use the apt repository, follow these steps:
+
+Create the file repository configuration:
+```
+  sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+```
+Import the repository signing key:
+```
+  wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+```
+Update the package lists:
+```
+  sudo apt-get update
+```
+Install the latest version of PostgreSQL.
+```
+  sudo apt-get -y install postgresql
+```
+Now postgresql is installed on the virtual machine.
+Run the command that will show the status of the PostgreSQL service.
+```
+  systemctl status postgresql
+```
+Now you need to creating ssl certificates.
+
+To create a simple self-signed certificate for the server, valid for 365 days, use the following OpenSSL command, replacing 'dbhost.yourdomain.com' with the server's host name:
+```
+  openssl req -new -x509 -days 365 -nodes -text -out server.crt \
+  -keyout server.key -subj "/CN=dbhost.yourdomain.com"
+```
+Then do:
+```
+  chmod og-rwx server.key
+```
+because the server will reject the file if its permissions are more liberal than this. For more details on how to create your server private key and certificate.
+While a self-signed certificate can be used for testing, a certificate signed by a certificate authority (CA) (usually an enterprise-wide root CA) should be used in production.
+To create a server certificate whose identity can be validated by clients, first create a certificate signing request (CSR) and a public/private key file:
+```
+  openssl req -new -nodes -text -out root.csr \
+    -keyout root.key -subj "/CN=root.yourdomain.com"
+  chmod og-rwx root.key
+  ```
+  Then, sign the request with the key to create a root certificate authority (using the default OpenSSL configuration file location on Linux):
+  ```
+    openssl x509 -req -in root.csr -text -days 3650 \
+  -extfile /etc/ssl/openssl.cnf -extensions v3_ca \
+  -signkey root.key -out root.crt
+  ```
+  Finally, create a server certificate signed by the new root certificate authority:
+```
+  openssl req -new -nodes -text -out server.csr \
+    -keyout server.key -subj "/CN=dbhost.yourdomain.com"
+  chmod og-rwx server.key
+
+  openssl x509 -req -in server.csr -text -days 365 \
+    -CA root.crt -CAkey root.key -CAcreateserial \
+    -out server.crt
+```
+server.crt and server.key should be stored on the server, and root.crt should be stored on the client so the client can verify that the server's leaf certificate was signed by its trusted root certificate. root.key should be stored offline for use in creating future certificates.
+
+For sending root.crt on server we will use scp technology (copying files via ssh).
+You can check the ssh connection:
+```
+  ssh vagrant@192.168.1.184
+  exit
+```
+> vagrant@192.168.1.184's password:
+>
+> password - vagrant
+
+Copy a local file to the server:
+```
+  scp root.crt vagrant@192.168.1.184:/home/vagrant/example
+```
+
+Next, you need to configure postgresql.
+We allow connection to PostgreSQL over the network.
+Open the postgresql.conf file
+```
+  nano /etc/postgresql/14/main/postgresql.conf
+```
+We find the following line:
+```
+  #listen_addresses = 'localhost'
+  
+  ssl = on
+  #ssl_ca_file = ''
+  ssl_cert_file = ''
+  #ssl_crl_file = ''
+  #ssl_crl_dir = ''
+  ssl_key_file = '' 
+```
+We make the following changes:
+```
+  listen_addresses = '*'
+  
+  ssl = on
+  #ssl_ca_file = ''
+  ssl_cert_file = '/etc/postgresql/14/main/server.crt'
+  #ssl_crl_file = ''
+  #ssl_crl_dir = ''
+  ssl_key_file = '/etc/postgresql/14/main/server.key'
+```
+> Instead of '*', you can specify the IP address of the required interface
+
+Now let's allow the connection from the network.
+Open the pg_hba.conf file.
+```
+  nano /etc/postgresql/14/main/pg_hba.conf
+```
+Modify the file as shown in the picture:
+
+![Снимок экрана от 2021-12-24 11-30-21](https://user-images.githubusercontent.com/91851663/147335076-a8c1bcc7-776e-4757-bb6c-f2c9f61df1b1.png)
+
+Save the changes and close the editor.
+Restarting PostgreSQL for the changes to take effect.
+```
+  systemctl restart postgresql
+```
+Creating a user and database in PostgreSQL.
+Switch to the postgres user.
+```
+  su - postgres
+```
+Run the psql utility – this is a console for PostgreSQL.
+```
+  psql
+```
+First of all, we need to set a password for the postgres user.
+```
+  \password postgres
+```
+Creating a new user on the PostgreSQL server.
+```
+  create user vlad with password '1111Aa';
+```
+> taras is the username, ‘120360A’ is his password.
+Let's create a database.
+```
+  create database mydb;
+```
+> django_db_taras is the name of the new database.
+We will transfer the database management rights to our new user.
+```
+  grant all privileges on database mydb to vlad;
+  \q
+```
+To check, let's connect to PostgreSQL on behalf of a new user.
+```
+  psql -h localhost mydb vlad
+```
+Everything works.
+```
+  \q
+  exit
+```
+Postgresql is installed and configured. 
+
+
+
+Useful links:
+- [PostgreSQL Apt]
+- [Installing and configuring PostgreSQL]
+- [scp]
+
+#### 2) Installing django
+Then we can proceed with the installation of Django.
+We are launching a virtual machine on which Django will be installed.
+```
+  vagrant up django
+  vagrant ssh django
+```
+If you wish to install Django using the Ubuntu repositories, the process is very straightforward.
+First, update your local package index with apt:
+```
+  sudo apt update
+```
+
+Install Python and PIP3
+```
+  sudo apt install python3 python3-pip
+```
+You can check the installed version of PIP with the following command:
+```
+  pip3 -V
+```
+Install Django
+Once PIP is installed, you can start installing Django.
+```
+  sudo pip3 install Django
+```
+Then, check the installed version.
+```
+  django-admin --version
+```
+Create a new Django project
+I will create a new project called example and install psycopg2.
+ 
+```
+  sudo django-admin startproject example
+  sudo apt install python3-psycopg2
+```
+Next, navigate into the example folder and migrate to set the initial configuration.
+```
+  cd example 
+  sudo python3 manage.py migrate
+```
+Also, you have to create the superuser to manage the project.
+```
+  sudo python3 manage.py createsuperuser
+```
+The next step is to edit the project configuration file to make it accessible from any computer. 
+So, open the file settings.py.
+```
+  sudo nano example/settings.py
+```
+And edit the following entry:
+```
+  ALLOWED_HOSTS = ['COMPUTER_IP_WHICH_IS_RUNNING_DJANGO']
+```
+And also configure the DATABASES section of the project configuration file settings.py:
+```
+  DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'mydb',
+        'USER' : 'vlad',
+        'PASSWORD' : '1111Aa',
+        'HOST' : '192.168.1.126',
+        'PORT' : '5432',
+        'OPTIONS': {
+        'sslrootcert': '/home/vagrant/example/root.crt',
+        },
+    }
+}
+```
+Navigate into the example folder and migrate to set the initial configuration.
+```
+  cd example 
+  sudo python3 manage.py migrate
+```
+Next, serve the project:
+```
+  sudo python3 manage.py runserver 0.0.0.0:8000
+```
+> Finally, access to your project using the web browser using the IP address of the computer which is running Django. 
+> Remember, Django uses the 8000 port, so you have to put it on the URL.
+> Also, you can log in to access the admin panel. http://your-server:8000/admin
+
+Useful links:
+- [Install Django]
+- [How To Install the Django]
+- [Django+PostgreSQL]
+
+
+For verification, you can create a new user on the website and then log in to the postgresql database:
+```
+  psql postgresql://vlad@localhost:5432/mydb
+```
+Make the following sql query
+```
+  select * from auth_user;
+```
+You should see the credentials you saw on the website.
+
+
+
+
+[Website about Virtualenv]: https://blog.sedicomm.com/2021/06/29/chto-takoe-virtualenv-v-python-i-kak-ego-ispolzovat/
+[Multi-Machine]: https://www.vagrantup.com/docs/multi-machine
+[Discover Vagrant Boxes]: https://app.vagrantup.com/boxes/search?utf8=%E2%9C%93&sort=downloads&provider=&q=bento+ubuntu+20.04
+[Networking and Multimachine]: https://nextheader.net/2018/04/24/vagrant-part-iii-networking-and-multimachine/
+[Install Django]: https://www.osradar.com/install-django-on-debian-10/
+[How To Install the Django]: https://www.digitalocean.com/community/tutorials/how-to-install-the-django-web-framework-on-ubuntu-20-04
+[PostgreSQL Apt]: https://www.postgresql.org/download/linux/ubuntu/
+[Installing and configuring PostgreSQL]: https://info-comp.ru/install-postgresql-12-on-debian
+[Django+PostgreSQL]: https://www.djbook.ru/examples/77/
+[scp]: https://wiki.enchtex.info/tools/console/scp
