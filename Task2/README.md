@@ -23,7 +23,6 @@ Set up two servers 1 Django 1 Postgres that communicate with each other (Django 
  6. Linux Ubuntu 20.04(for vagrant box)
  7. Python (3.8.10 or 3.7.6)
  8. Virtualenv (20.0.17)
- 9. 
  
  ## 0. Install vagrant and VirtualBox:
  1. You need to go to the virtualbox [website](https://www.virtualbox.org/wiki/Downloads) and download the latest version for Windwos(I have it 6.1.30)<br>
@@ -309,11 +308,7 @@ Open the pg_hba.conf file.
 ```
   nano /etc/postgresql/14/main/pg_hba.conf
 ```
-Modify the file as shown in the picture:
 
-![Снимок экрана от 2021-12-24 11-30-21](https://user-images.githubusercontent.com/91851663/147335076-a8c1bcc7-776e-4757-bb6c-f2c9f61df1b1.png)
-
-Save the changes and close the editor.
 Restarting PostgreSQL for the changes to take effect.
 ```
   systemctl restart postgresql
