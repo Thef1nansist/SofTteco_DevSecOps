@@ -106,22 +106,7 @@ Set up two servers 1 Django 1 Postgres that communicate with each other (Django 
    ```
   $ vagrant plugin install virtualbox_WSL2
    ```
-## 4. Create project folder:
-   Go to the required directive and create project folder:
-   ```
-   $ mkdir VagrantVM
-   $ cd ./Task2/
-   ```
-## 5. Create your virtualenv:
-   First, verify the installed Python version:
-   ```
-   # check Python version
-   $ python3 -V
-   Python 3.8.10
-   $ python3 -m venv virtualenv
-   $ ls
-   virtualenv   
-   ```
+   
 ### Installation
 
 Let's create a folder for our project.
